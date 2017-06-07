@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>wrapScroller demo</title>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body style="background: #ccc;">
+<div>
+    HEADER - use 2 fingers to scroll contents:
+</div>
+<div id="scrollee" style="width:300px;height:300px;-webkit-overflow-scrolling:touch; overflow: scroll;">
+    <iframe id="object" height="90%" width="100%" type="text/html" src="./scroll.html"></iframe>
+</div>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script>
+    var toScrollFrame = function(iFrame, mask) {
+        if (!navigator.userAgent.match(/iPad|iPhone/i))
+            return false;
+        var mouseY = 0;
+        var mouseX = 0;
+        jQuery(iFrame).ready(function() {
+            jQuery(iFrame).contents()[0].body.addEventListener('touchstart', function(e) {
+                mouseY = e.targetTouches[0].pageY;
+                mouseX = e.targetTouches[0].pageX;
+            });
+            jQuery(iFrame).contents()[0].body.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                var box = jQuery(mask);
+                box.scrollLeft(box.scrollLeft() + mouseX - e.targetTouches[0].pageX);
+                box.scrollTop(box.scrollTop() + mouseY - e.targetTouches[0].pageY);
+            });
+        });
+        return true;
+    };
+
+    toScrollFrame('#scrollee', '#object');
+
+</script>
+</body>
+</html>
